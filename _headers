@@ -1,0 +1,40 @@
+# _headers — for Cloudflare Pages / Netlify (GitHub Pages ignores this file).
+# Put it at the site root, next to index.html. It is not served to visitors.
+#
+# Cache-Control is set only in the path-specific blocks, never in /*, because
+# both hosts merge headers from every matching rule.
+#
+# CSP: the manual is self-contained (inline <script>/<style>, images as data: URIs,
+# icons + sw.js + manifest from the same origin, no external requests).
+# 'unsafe-inline' is used instead of hashes so replacing index.html never breaks the page.
+# connect-src 'self' is needed because the service worker fetches the page and icons.
+# If you ever add external fonts or scripts, update the CSP.
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin
+  Strict-Transport-Security: max-age=31536000
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; manifest-src 'self'; worker-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+
+# Page: always revalidate so manual updates show up straight away.
+/
+  Cache-Control: no-cache
+
+/index.html
+  Cache-Control: no-cache
+
+# Service worker: never serve it stale, or updates stop reaching installed copies.
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# PWA manifest.
+/manifest.webmanifest
+  Content-Type: application/manifest+json
+  Cache-Control: public, max-age=3600
+
+# Icons: 1 day (sw.js caches them cache-first; bump VERSION in sw.js when you change them).
+/icons/*
+  Cache-Control: public, max-age=86400
