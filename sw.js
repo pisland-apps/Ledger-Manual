@@ -2,7 +2,7 @@
  * - 页面（index.html）：联网优先，保证更新及时；断网或超时则用缓存
  * - 图标等静态文件：缓存优先
  * 更换图标等静态文件后，把下面的 VERSION 改成新值即可清掉旧缓存。 */
-const VERSION = 'v589';
+const VERSION = 'v601';
 const CACHE = 'ledger-manual-' + VERSION;
 const CORE = [
   './',
